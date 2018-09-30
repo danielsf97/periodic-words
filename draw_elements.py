@@ -36,7 +36,7 @@ def draw_element(cn, element, group):
 
     d.text((20,10), cn, font=font_cn, fill=(255,255,255))
     
-    path = 'pictures/' + cn + '.png'
+    path = 'uploads/' + cn + '.png'
     
     img.save(path)
 
