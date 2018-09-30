@@ -15,12 +15,19 @@ def main():
     #    words.append(word.strip())
     print(find_prefix(0,"Boro",elements))
 
-    (ws, ws_count) = split_word("Gafetio", elements)
+    (ws, ws_count) = split_word("accessibilities", elements)
     #if ws != []:
     #	i = 0
     #	while i < ws_count:
     #		ws[i] = elements[ws[i]]
     print(ws)
+    print_word(ws, elements)
+
+def print_word(result, elements):
+    for el in result:
+        print(elements[el], end='')
+    
+    print()
 
 def split_word(word, elements):
 	w_it = 0
@@ -60,12 +67,6 @@ def split_word(word, elements):
 			ws_it += 1
 	return (ws, ws_it)
 
-
-
-
-			
-
-
 def find_prefix(i, word, elements):
 	size = len(elements)
 	found = 0
@@ -75,7 +76,5 @@ def find_prefix(i, word, elements):
 		else: i+=1
 	return i
 
-
-
 if __name__ == "__main__":
-    main()
+    omain()
