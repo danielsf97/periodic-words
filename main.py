@@ -27,11 +27,7 @@ def split_word(word, elements):
 	ws_size = 0
 	while(w_it < word_size):
 		o = find_prefix(0, word[w_it:], elements)
-		print("%%%%%")
-		print(w_it)
-		#print(elements[o])
 		if o >= 118 and ws_it > 0:
-			print(1)
 			back = 1
 			while ws_it > 0 and back == 1:
 			    ws_it -= 1
@@ -47,11 +43,9 @@ def split_word(word, elements):
 				ws = []
 				break
 		elif o >= 118 and ws_it <= 0:
-			print(2)
 			ws = []
 			break
 		else:
-			print(3)
 			ws.append(o)
 			w_it += len(elements[o])
 			ws_it += 1
@@ -68,14 +62,12 @@ def find_prefix(i, word, elements):
 
 def gen_word(result):
     temp = []
-    print(result)
     for el in result:
         filename = str(el+1) + '.png'
-        print(filename)
-        temp.append('<img src=\"' + url_for('uploaded_file', filename =
-            filename) + '">')
+        temp.append(url_for('uploaded_file', filename =
+            filename))
 
-    return '<p>' + ''.join(temp) + '</p>'
+    return temp
 
 
 @app.route('/result')
@@ -91,24 +83,31 @@ def result():
         (ws, ws_count) = split_word(line, elements)
         lines.append(gen_word(ws))
 
-    return "\n".join(lines)
-
+    #return "\n".join(lines)
+    return render_template("result.html", lines = lines)
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        if 'file' not in request.files:
+        if 'file' not in request.files and 'word' not in request.form:
             flash('No file part')
             return redirect(request.url)
-        file = request.files['file']
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'palavras.txt'))
-            return redirect('/result')
+        if 'file' in request.files:
+            file = request.files['file']
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'palavras.txt'))
+                return redirect('/result')
+        if 'word' in request.form:
+            word = request.form['word']
+            if word:
+                with open('uploads/palavras.txt', 'w') as f:
+                    f.write(word)
+                return redirect('/result')
     return render_template("index.html")
 
 def elems():

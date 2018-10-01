@@ -1,0 +1,13 @@
+<head>
+    <title>Palavras Periódicas</title>
+</head>
+<body>
+    {% for line in lines %}
+    <p>
+        {% for word in line %}
+            <img src="{{ word }}" />
+        {% endfor %}
+    </p>
+    {% endfor %}
+</body>
+
