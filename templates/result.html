@@ -148,8 +148,10 @@
                     </div>
                 </div>
             {% else: %}
-                {% for word in line %}
-                <img src="{{ word }}" />
+                {% for (word,elem) in line %}
+                <a href="https://pt.wikipedia.org/wiki/{{ elem }}">
+                    <img src="{{ word }}" />
+                </a>
             {% endfor %}
             {% endif %}
         <br>

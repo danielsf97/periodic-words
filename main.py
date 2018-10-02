@@ -60,12 +60,14 @@ def find_prefix(i, word, elements):
 		else: i+=1
 	return i
 
-def gen_word(result):
+def gen_word(result, elements):
     temp = []
     for el in result:
         filename = str(el+1) + '.png'
-        temp.append(url_for('uploaded_file', filename =
-            filename))
+        temp.append((url_for('uploaded_file', filename =
+            filename),elements[el]))
+        print((url_for('uploaded_file', filename =
+            filename),elements[el]))
 
     return temp
 
@@ -73,17 +75,19 @@ def gen_word(result):
 @app.route('/result')
 def result():
     lines = []
-    elements = elems()
+
+    (siglas, elements) = elems()
     with open('uploads/palavras.txt') as f:
         content = f.readlines()
 
     content = [x.strip() for x in content]
 
-    for line in content:
-        (ws, ws_count) = split_word(line, elements)
-        lines.append((line, gen_word(ws)))
+    for word in content:
+        (ws, ws_count) = split_word(word, siglas)
+        lines.append((word, gen_word(ws, elements)))
+        
 
-    return render_template("result.html", lines = lines )
+    return render_template("result.html", lines = lines)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -112,9 +116,11 @@ def index():
 def elems():
     'Obtenção de elementos'
     out = getoutput("cat pw.txt | awk -F \"[ \t]+\" '{print $2}'")
+    siglas = out.split("\n")
+    out = getoutput("cat pw.txt | awk -F \"[ \t]+\" '{print $3}'")
     elements = out.split("\n")
 
-    return elements
+    return (siglas,elements)
 
 if __name__ == "__main__":
     app.run(debug=True)
