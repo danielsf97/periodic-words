@@ -81,10 +81,10 @@ def result():
 
     for line in content:
         (ws, ws_count) = split_word(line, elements)
-        lines.append(gen_word(ws))
+        lines.append((line, gen_word(ws)))
 
     #return "\n".join(lines)
-    return render_template("result.html", lines = lines)
+    return render_template("result.html", lines = lines )
 
 
 @app.route('/', methods=['GET', 'POST'])
