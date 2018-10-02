@@ -83,7 +83,6 @@ def result():
         (ws, ws_count) = split_word(line, elements)
         lines.append((line, gen_word(ws)))
 
-    #return "\n".join(lines)
     return render_template("result.html", lines = lines )
 
 
@@ -93,7 +92,7 @@ def index():
         if 'file' not in request.files and 'word' not in request.form:
             flash('No file part')
             return redirect(request.url)
-        if 'file' in request.files:
+        if 'file' in request.files and 'fileButton' in request.form:
             file = request.files['file']
             if file.filename == '':
                 flash('No selected file')
@@ -102,7 +101,7 @@ def index():
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'palavras.txt'))
                 return redirect('/result')
-        if 'word' in request.form:
+        if 'word' in request.form and 'wordButton' in request.form:
             word = request.form['word']
             if word:
                 with open('uploads/palavras.txt', 'w') as f:
