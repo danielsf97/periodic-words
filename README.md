@@ -1,6 +1,6 @@
 # Periodic Words ![CI status](https://img.shields.io/badge/build-passing-brightgreen.svg)
 
-Periodic Words is program that given a single word or a file with a list of words (one word per line), find which word can be written as a sequence of chemical symbol (ex:"bacon = Ba + Co + N).
+Periodic Words is program that given a single word or a file with a list of words (one word per line), find which word can be written as a sequence of chemical symbols (ex:"bacon = Ba + Co + N).
 
 ## Installation
 `$ git clone https://github.com/helenapoleri/Periodic-Words.git `
