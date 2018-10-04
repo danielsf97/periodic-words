@@ -10,6 +10,8 @@ ALLOWED_EXTENSIONS = set(['txt'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.secret_key = "secret"
+
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -99,24 +101,28 @@ def result():
 def index():
     """Gera a página inicial, onde se pode fornecer um ficheiro, ou uma única palavra"""    
     if request.method == 'POST':
-        if 'file' not in request.files and 'word' not in request.form:
-            flash('No file part')
-            return redirect(request.url)
-        if 'file' in request.files and 'fileButton' in request.form:
-            file = request.files['file']
-            if file.filename == '':
-                flash('No selected file')
-                return redirect(request.url)
-            if file and allowed_file(file.filename):
+        if 'fileButton' in request.form:
+            if 'file' not in request.files:
+                flash('No selected file!')
+                return redirect(url_for('index'))
+            elif not allowed_file(request.files['file'].filename):
+                flash('Invalid file! Allowed file types: .txt')
+                return redirect(url_for('index'))
+            else:
+                file = request.files['file']
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'palavras.txt'))
                 return redirect('/result')
-        if 'word' in request.form and 'wordButton' in request.form:
-            word = request.form['word']
-            if word:
+        elif 'wordButton' in request.form:
+            if 'word' in request.form and request.form['word'] != "":
+                word = request.form['word']
                 with open('uploads/palavras.txt', 'w') as f:
                     f.write(word)
                 return redirect('/result')
+            else:
+                flash('No word was provided!')
+                return redirect(url_for('index'))
+
     return render_template("index.html")
 
 def elems():
