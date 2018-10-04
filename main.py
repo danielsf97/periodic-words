@@ -71,8 +71,6 @@ def gen_word(result, elements):
         filename = str(el+1) + '.png'
         temp.append((url_for('uploaded_file', filename =
             filename),elements[el]))
-        print((url_for('uploaded_file', filename =
-            filename),elements[el]))
 
     return temp
 
@@ -83,12 +81,13 @@ def result():
     lines = []
 
     (siglas, elements) = elems()
-    with open('uploads/palavras.txt') as f:
-        content = f.readlines()
+    
+    with open('uploads/palavras.txt') as fl:
+        fc = fl.readlines()
 
-    content = [x.strip() for x in content]
+    fc = [l.strip() for l in fc]
 
-    for word in content:
+    for word in fc:
         (ws, ws_count) = split_word(word, siglas)
         lines.append((word, gen_word(ws, elements)))
         
@@ -127,7 +126,7 @@ def elems():
     out = getoutput("cat pw.txt | awk -F \"[ \t]+\" '{print $3}'")
     elements = out.split("\n")
 
-    return (siglas,elements)
+    return (siglas, elements)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug = True)

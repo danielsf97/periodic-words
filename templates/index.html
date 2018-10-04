@@ -5,13 +5,14 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
         <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
         <style>
+
             body {
-                #background-color: #f2f2f2;
                 background: -webkit-linear-gradient(top, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 100%), url('/uploads/result.png');
                 background-repeat: repeat;
-                background-size:700px;
+                background-size: 700px;
                 font-family: 'Open Sans';
             }
+
             .wrapper {
                 background-color: white;
                 width: 40vw;
@@ -39,6 +40,7 @@
                 font-size: 50px;
                 font-family: 'Lobster';
             }
+
             .filePlace {
             	width: 25vw;
         	    height: 5vh;
@@ -47,54 +49,50 @@
                 border-radius: 5px;
            	    opacity: 1;
                 border: 1px solid black;
-            /*	overflow: hidden;
-            	position: absolute;
-            	z-index: -1;*/
             }
+
             .fileP {
-                width:23vw;
-                background-color:white;
-                color:black;
-                padding-left:1vw;
-                padding-right:1vw;
+                width: 23vw;
+                background-color: white;
+                color: black;
+                padding-left: 1vw;
+                padding-right: 1vw;
             }
-           /* .filePlace + label {
-                 font-size: 1.25em;
-                 font-weight: 700;
-                 color: white;
-                 background-color: black;
-                 display: inline-block;
-            }
-            
-            .filePlace:focus + label, .filePlace+ label:hover {
-                background-color: red;
-            }*/
+
             .sButton {
-                background-color:green;
+                background-color: green;
                 color: white;
                 border: 0;
                 width: 3vw;
-                height:5vh;
+                height: 5vh;
                 border: 1px solid black;
-                -webkit-border-radius:5px;
-                -moz-border-radius:5px;
-                border-radius:5px;
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                border-radius: 5px;
             }
 
             </style>
     </head>
     <body>
         <div class="wrapper">
-            <h1>Palavras Periódicas</h1>
+            <h1>Periodic Words</h1>
             <form method=post enctype=multipart/form-data>
-                <p><label for="file">Escolha um ficheiro</label></p>
-                <p><input type=file name=file id="file" class="filePlace">
+            <p>
+                <label for="file">Choose a file</label>
+            </p>
+            <p>
+                <input type=file name=file id="file" class="filePlace">
                 <button type=submit class="sButton" name="fileButton"><i class="fas
-                fa-check"></i></button></p>
-                <p><label for="word">ou escreva uma palavra</label></p>
-                <p><input type="text" name=word id="word" class="filePlace fileP">
+                fa-check"></i></button>
+            </p>
+            <p>
+                <label for="word">or write a single word</label>
+            </p>
+            <p>
+                <input type="text" name=word id="word" class="filePlace fileP">
                 <button type=submit class="sButton" name="wordButton"><i class="fas
-                fa-check"></i></button></p>
+                fa-check"></i></button>
+            </p>
         </div>
     </body>
 </form>

@@ -7,11 +7,9 @@
         <style>
 
             body {
-                #background-color: #f2f2f2;
                 background: -webkit-linear-gradient(top, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 100%), url('/uploads/result.png');
                 background-repeat: repeat;
-                background-size:700px;
-                
+                background-size: 700px;
                 font-family: 'Open Sans';
             }
 
@@ -57,6 +55,7 @@
                 -ms-transform: translate(-50%, -50%);
                 transform: translate(-50%, -50%);
             }
+
             h1 {
                 -webkit-border-radius: 5px;
                 -moz-border-radius: 5px;
@@ -65,12 +64,14 @@
                 font-size: 50px;
                 font-family: 'Lobster';
             }
+
             h3 {
                 margin-top: 15px;
                 margin-bottom: 0;
                 color: black;
                 font-size: 20px;
             }
+
             .filePlace {
             	width: 25vw;
         	    height: 5vh;
@@ -79,38 +80,26 @@
                 border-radius: 5px;
            	    opacity: 1;
                 border: 1px solid black;
-            /*	overflow: hidden;
-            	position: absolute;
-            	z-index: -1;*/
-            }
-            .fileP {
-                width:23vw;
-                background-color:white;
-                color:black;
-                padding-left:1vw;
-                padding-right:1vw;
-            }
-           /* .filePlace + label {
-                 font-size: 1.25em;
-                 font-weight: 700;
-                 color: white;
-                 background-color: black;
-                 display: inline-block;
             }
             
-            .filePlace:focus + label, .filePlace+ label:hover {
-                background-color: red;
-            }*/
+            .fileP {
+                width: 23vw;
+                background-color: white;
+                color: black;
+                padding-left: 1vw;
+                padding-right: 1vw;
+            }
+            
             .sButton {
-                background-color:green;
+                background-color: green;
                 color: white;
                 border: 0;
                 width: 3vw;
-                height:5vh;
+                height: 5vh;
                 border: 1px solid black;
-                -webkit-border-radius:5px;
-                -moz-border-radius:5px;
-                border-radius:5px;
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                border-radius: 5px;
             }
 
             hr {
@@ -122,8 +111,8 @@
 
             .box1 {
                 margin: 0 auto;
-                height : 100px;
-                width : 400px;
+                height: 100px;
+                width: 400px;
                 border: 2px solid black;
                 position: relative;
             }
@@ -132,32 +121,32 @@
     </head>
 <body>
     <div class="wrapper">
-        <h1>Palavras Periódicas</h1>
-    </div>    
+        <h1>Periodic Words</h1>
+    </div>
     <br>
     <br>
-        {% for (pal,line) in lines%} 
-        <div class="wrapper2">
-        <h3 align="left" >{{ pal }} </h3> 
+    {% for (pal,line) in lines %} 
+    <div class="wrapper2">
+        <h3 align="left" >{{ pal }}</h3> 
         <hr>
         <br>
-            {% if not line %}
-                <div class="box1">
-                    <div class="center">
-                        <h2> No match found </h2>
-                    </div>
-                </div>
-            {% else: %}
-                {% for (word,elem) in line %}
-                <a href="https://pt.wikipedia.org/wiki/{{ elem }}">
-                    <img src="{{ word }}" />
-                </a>
-            {% endfor %}
-            {% endif %}
-        <br>
-        <br>
+        {% if not line %}
+        <div class="box1">
+            <div class="center">
+                <h2> No match found </h2>
+            </div>
         </div>
-        <br>
+        {% else: %}
+        {% for (word, elem) in line %}
+        <a href="https://pt.wikipedia.org/wiki/{{ elem }}">
+            <img src="{{ word }}" />
+        </a>
         {% endfor %}
+        {% endif %}
+        <br>
+        <br>
+    </div>
+    <br>
+   {% endfor %}
 </body>
 
