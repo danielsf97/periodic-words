@@ -121,9 +121,9 @@ def index():
 
 def elems():
     """Obtenção de elementos"""
-    out = getoutput("cat pw.txt | awk -F \"[ \t]+\" '{print $2}'")
+    out = getoutput("cat uploads/pw.txt | awk -F \"[ \t]+\" '{print $2}'")
     siglas = out.split("\n")
-    out = getoutput("cat pw.txt | awk -F \"[ \t]+\" '{print $3}'")
+    out = getoutput("cat uploads/pw.txt | awk -F \"[ \t]+\" '{print $3}'")
     elements = out.split("\n")
 
     return (siglas, elements)
