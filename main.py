@@ -13,13 +13,16 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
+    """Efetua upload de um dado ficheiro"""
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
 
 def allowed_file(filename):
+    """Verifica se um ficheiro preenche os requisitos necessários"""
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def split_word(word, elements):
+	"""Devolve os se possível os simbolos quimicos que formam uma dada palavra"""
 	w_it = 0
 	word_size = len(word)
 	ws = []
@@ -52,6 +55,7 @@ def split_word(word, elements):
 	return (ws, ws_it)
 
 def find_prefix(i, word, elements):
+	"""Encontra um possível símbolo químico como prefixo da palavra pretendida """
 	size = len(elements)
 	found = 0
 	while i < size and not found :
@@ -61,6 +65,7 @@ def find_prefix(i, word, elements):
 	return i
 
 def gen_word(result, elements):
+    """Para uma dada palavra, obtém as imagens dos respetivos simbolos quimicos"""
     temp = []
     for el in result:
         filename = str(el+1) + '.png'
@@ -74,6 +79,7 @@ def gen_word(result, elements):
 
 @app.route('/result')
 def result():
+    """Gera a página com o resultado"""
     lines = []
 
     (siglas, elements) = elems()
@@ -92,6 +98,7 @@ def result():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    """Gera a página inicial, onde se pode fornecer um ficheiro, ou uma única palavra"""    
     if request.method == 'POST':
         if 'file' not in request.files and 'word' not in request.form:
             flash('No file part')
@@ -114,7 +121,7 @@ def index():
     return render_template("index.html")
 
 def elems():
-    'Obtenção de elementos'
+    """Obtenção de elementos"""
     out = getoutput("cat pw.txt | awk -F \"[ \t]+\" '{print $2}'")
     siglas = out.split("\n")
     out = getoutput("cat pw.txt | awk -F \"[ \t]+\" '{print $3}'")
