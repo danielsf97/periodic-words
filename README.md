@@ -17,7 +17,7 @@ Periodic Words is program that given a single word or a file with a list of word
 
 ## Usage
 
-`$ export FLASK_APP = main.py`
+`$ export FLASK_APP=main.py`
 
 `$ run flask`
 
