@@ -1,7 +1,9 @@
 import os
-from flask import Flask, flash, send_from_directory, request, redirect, url_for, render_template
+from flask import Flask, flash, send_from_directory, request, redirect, url_for, render_template, send_file
 from werkzeug.utils import secure_filename
 from subprocess import getoutput
+from PIL import Image
+import random
 import fileinput
 import re
 
@@ -96,6 +98,29 @@ def result():
 
     return render_template("result.html", lines = lines)
 
+@app.route('/download_img/', methods=['POST'])
+def download_img():
+  """Efetua o download da imagem pretendida."""
+  line = request.form.get('my_linkBtn')
+
+  words = list(filter(None,re.split('\(|\)| |[^\']*\'\)|,|\[|\]|,|\'',line)))
+  path = "results/"+ words[0] + ".png"
+
+  result_width = 100 * len(words[1:])
+  result = Image.new('RGB',(result_width,100))
+
+  it = 0;
+  for symbol in words[1:]:
+      image1 = Image.open(symbol[1:])
+      result.paste(im=image1, box=(it*100,0))
+      it = it + 1
+  
+  result.save(path)
+
+  return send_file(path,
+                     mimetype='png',
+                     attachment_filename=words[0] + '.png',
+                     as_attachment=True)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():

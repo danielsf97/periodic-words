@@ -121,6 +121,33 @@
                 text-decoration:none;
             }
 
+            .btn {
+                background-color: DodgerBlue;
+                border: none;
+                color: white;
+                padding: 10px 30px;
+                cursor: pointer;
+                font-size: 18px;
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                border-radius: 5px;
+            }
+
+            .d-table {
+                display:table !important;
+                }
+
+            .d-table-cell {
+                display:table-cell !important;
+                }
+
+            .w-100 {
+                width: 100% !important;
+                }
+
+            .tar {
+                text-align: right !important;
+                }
             </style>
     </head>
 <body>
@@ -131,16 +158,29 @@
     <br>
     {% for (pal,line) in lines %} 
     <div class="wrapper2">
+        {% if not line %}
         <h3 align="left" >{{ pal }}</h3> 
         <hr>
         <br>
-        {% if not line %}
         <div class="box1">
             <div class="center">
                 <h2> No match found </h2>
             </div>
         </div>
         {% else: %}
+        <div class="border d-table w-100">
+            <h3 align="left" >{{ pal }}</h3> 
+            <div class="d-table-cell tar">
+                <form action="{{ url_for('download_img') }}" method="post">
+                    <button  name="my_linkBtn" type="submit" class="btn" value="{{ (pal,line) }}">
+                            <i class="fa fa-download"></i> Download
+                    </button>
+                </form>
+            </div>
+        </div>
+        <hr>
+        <br>
+
         {% for (word, elem) in line %}
         <a href="https://pt.wikipedia.org/wiki/{{ elem }}">
             <img src="{{ word }}" />
