@@ -13,21 +13,18 @@ ALLOWED_EXTENSIONS = set(['txt'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.secret_key = "secret"
-
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    """Efetua upload de um dado ficheiro"""
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
 
 def allowed_file(filename):
-    """Verifica se um ficheiro tem a extensão esperada pelo programa"""
+    """Verifica se um ficheiro serve como input ao programa """
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def split_word(word, elements):
-    """Devolve, se possível, uma lista com os símbolos químicos que formam uma dada palavra"""
+    """Devolve, se possível, uma lista de símbolos químicos que formam uma dada palavra"""
     w_it = 0
     word_size = len(word)
     ws = []
@@ -39,7 +36,7 @@ def split_word(word, elements):
             back = 1
             while ws_it > 0 and back == 1:
                 ws_it -= 1
-                w_it -= len(elements[ws[ws_it]]) 
+                w_it -= len(elements[ws[ws_it]])
                 o = find_prefix(ws[ws_it] + 1, word[w_it:], elements)
                 ws.pop()
                 if o != 118:
@@ -57,23 +54,22 @@ def split_word(word, elements):
             ws.append(o)
             w_it += len(elements[o])
             ws_it += 1
-
     return (ws, ws_it)
 
 def find_prefix(i, word, elements):
     """Encontra um possível símbolo químico como prefixo da palavra pretendida """
     size = len(elements)
     found = 0
-    while i < size and not found:
+    while i < size and not found :
         if re.match(elements[i], word, re.IGNORECASE): 
             found = 1
-        else: i += 1
+        else: i+=1
     return i
+
 
 def gen_word(result, elements):
     """Para uma dada palavra, obtém as imagens dos respetivos símbolos químicos"""
     temp = []
-
     for el in result:
         filename = str(el + 1) + '.png'
         temp.append((url_for('uploaded_file', filename =
@@ -87,7 +83,7 @@ def result():
     """Gera a página com o resultado"""
     lines = []
 
-    (siglas, elements) = elems()
+    (symbols, elements) = elems()
     
     with open('uploads/palavras.txt') as fl:
         fc = fl.readlines()
@@ -95,24 +91,22 @@ def result():
     fc = [l.strip() for l in fc]
 
     for word in fc:
-        (ws, ws_count) = split_word(word, siglas)
+        (ws, ws_count) = split_word(word, symbols)
         lines.append((word, gen_word(ws, elements)))
-        
 
     return render_template("result.html", lines = lines)
 
-@app.route('/download_img/', methods = ['POST'])
+@app.route('/download_img/', methods=['POST'])
 def download_img():
-    """Efetua o download da imagem pretendida."""
+    """Efetua o download da imagem pretendida"""
     line = request.form.get('downloadBtn')
 
-    words = list(filter(None,re.split('\(|\)| |[^\']*\'\)|,|\[|\]|,|\'', line)))
+    words = list(filter(None, re.split('\(|\)| |[^\']*\'\)|,|\[|\]|,|\'', line)))
 
     result_width = 100 * len(words[1:])
     result = Image.new('RGB',(result_width, 100))
 
     it = 0;
-    
     for symbol in words[1:]:
         image1 = Image.open(symbol[1:])
         result.paste(im = image1, box = (it * 100, 0))
@@ -127,51 +121,42 @@ def download_img():
                      attachment_filename = words[0] + '.png',
                      as_attachment = True)
 
-@app.route('/', methods = ['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
     """Gera a página inicial, onde se pode fornecer um ficheiro, ou uma única palavra"""    
     if request.method == 'POST':
         if 'fileButton' in request.form:
             if 'file' not in request.files:
                 flash('No selected file!')
-
                 return redirect(url_for('index'))
-
             elif not allowed_file(request.files['file'].filename):
                 flash('Invalid file! Allowed file types: .txt')
-
                 return redirect(url_for('index'))
-
             else:
                 file = request.files['file']
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'palavras.txt'))
-
                 return redirect('/result')
-
         elif 'wordButton' in request.form:
             if 'word' in request.form and request.form['word'] != "":
                 word = request.form['word']
                 with open('uploads/palavras.txt', 'w') as f:
                     f.write(word)
-
                 return redirect('/result')
-                
             else:
                 flash('No word was provided!')
-
                 return redirect(url_for('index'))
 
     return render_template("index.html")
 
 def elems():
-    """Obtenção dos elementos da tabela periódica e respetivas siglas"""
-    out = getoutput("cat uploads/pw.txt | awk -F \"[ \t]+\" '{ print $2 }'")
-    siglas = out.split("\n")
-    out = getoutput("cat uploads/pw.txt | awk -F \"[ \t]+\" '{ print $3 }'")
+    """Obtenção de elementos"""
+    out = getoutput("cat uploads/elements.txt | awk -F \"[ \t]+\" '{ print $2 }'")
+    symbols = out.split("\n")
+    out = getoutput("cat uploads/elements.txt | awk -F \"[ \t]+\" '{ print $3 }'")
     elements = out.split("\n")
 
-    return (siglas, elements)
+    return (symbols, elements)
 
 if __name__ == "__main__":
     app.run(debug = True)
