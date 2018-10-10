@@ -3,6 +3,7 @@ from flask import Flask, flash, send_from_directory, request, redirect, url_for,
 from werkzeug.utils import secure_filename
 from subprocess import getoutput
 from PIL import Image
+from io import BytesIO
 import random
 import fileinput
 import re
@@ -104,7 +105,6 @@ def download_img():
   line = request.form.get('my_linkBtn')
 
   words = list(filter(None,re.split('\(|\)| |[^\']*\'\)|,|\[|\]|,|\'',line)))
-  path = "results/"+ words[0] + ".png"
 
   result_width = 100 * len(words[1:])
   result = Image.new('RGB',(result_width,100))
@@ -114,13 +114,15 @@ def download_img():
       image1 = Image.open(symbol[1:])
       result.paste(im=image1, box=(it*100,0))
       it = it + 1
-  
-  result.save(path)
 
-  return send_file(path,
-                     mimetype='png',
-                     attachment_filename=words[0] + '.png',
-                     as_attachment=True)
+  img_io = BytesIO()
+  result.save(img_io, 'PNG', quality=70)
+  img_io.seek(0)
+
+  return send_file(img_io,
+                   mimetype='image/png',
+                   attachment_filename=words[0] + '.png',
+                   as_attachment=True)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
