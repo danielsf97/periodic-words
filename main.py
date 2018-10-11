@@ -100,17 +100,19 @@ def result():
 def download_img():
     """Efetua o download da imagem pretendida"""
     line = request.form.get('downloadBtn')
-
     words = list(filter(None, re.split('\(|\)| |[^\']*\'\)|,|\[|\]|,|\'', line)))
-
     result_width = 100 * len(words[1:])
     result = Image.new('RGB',(result_width, 100))
 
     it = 0;
+    imageTransp = Image.open('uploads/transp.png')
     for symbol in words[1:]:
         image1 = Image.open(symbol[1:])
-        result.paste(im = image1, box = (it * 100, 0))
+        result.paste(im = image1, box = (it * 100 + 10, 0))
         it += 1
+        if it < len(words[1:]):
+            result.paste(im = imageTransp, box = (it * 100, 0))
+        
 
     img_io = BytesIO()
     result.save(img_io, 'PNG', quality = 70)
